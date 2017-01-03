@@ -130,7 +130,6 @@ class Auth extends Controller
     }
 
 
-
     public function redirectToProvider()
     {
         return Socialite::driver('facebook')->stateless()->redirect();
@@ -143,6 +142,10 @@ class Auth extends Controller
         return response()->json([
         'Email' => $user->getEmail()
     ], 400);
+
+
+        //////Need lưu database
+        
 
         // $user->token;
     }
