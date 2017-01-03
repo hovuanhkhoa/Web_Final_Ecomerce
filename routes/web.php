@@ -11,6 +11,12 @@
 |
 */
 
+use Illuminate\Support\Facades\Hash;
+
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/crypt', function () {
+    return Hash::make('123456789');
 });
