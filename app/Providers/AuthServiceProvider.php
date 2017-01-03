@@ -40,6 +40,12 @@ class AuthServiceProvider extends ServiceProvider
 
         //Passport::refreshTokensExpireIn(Carbon::now()->addDays(30));
 
+        Passport::tokensCan([
+            'admin' => 'Manage another users',
+            'user' => 'Manage item in web',
+            'guest' => 'Add a item to cart',
+        ]);
+
         Passport::pruneRevokedTokens();
 
         //
