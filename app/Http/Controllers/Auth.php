@@ -145,7 +145,7 @@ class Auth extends Controller
 
 
         //////Need lưu database
-        
+
 
         // $user->token;
     }
