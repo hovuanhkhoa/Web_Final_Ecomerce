@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 
 
 class Auth extends Controller
@@ -127,4 +128,24 @@ class Auth extends Controller
         }
         return $role;
     }
+
+
+
+    public function redirectToProvider()
+    {
+        return Socialite::driver('facebook')->stateless()->redirect();
+    }
+
+    public function handleProviderCallback()
+    {
+        $user = Socialite::driver('facebook')->stateless()->user();
+
+        return response()->json([
+        'Email' => $user->getEmail()
+    ], 400);
+
+        // $user->token;
+    }
+
+
 }
