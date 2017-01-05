@@ -43,9 +43,7 @@ class Auth extends Controller
             return  Route::dispatch($tokenRequest);
         }
         else{
-            return response()->json([
-                'message' => 'Parameter is wrong'
-            ], 400);
+            return $this->BadResponse();
         }
     }
 
@@ -65,9 +63,7 @@ class Auth extends Controller
             return  Route::dispatch($tokenRequest);
         }
         else{
-            return response()->json([
-                'message' => 'Parameter is wrong'
-            ], 400);
+            return $this->BadResponse();
         }
     }
 
@@ -84,27 +80,21 @@ class Auth extends Controller
             $user->ID_ROLE = 2;
 
             if(User::where('Username',$user->Username)->exists())
-                return response()->json([
-                    'message' => 'Username is existed'
-                ], 403);
+                return $this->ForbiddenResponse('Username is existed');
 
             $user->save();
-            return  response()->json([
-                'username' => $user->Username
-            ], 200);
+            return  $this->CreatedResponse($user);
         }
         else{
-            return response()->json([
-                'message' => 'Parameter is wrong'
-            ], 400);
+            return $this->BadResponse();
         }
     }
 
 
     public function CheckRole($username){
         $role =  DB::table('users')
-            ->join('ROLES','users.ID_ROLE','ROLES.ID')
-            ->select('ROLES.Role_name as name')
+            ->join('roles','users.ID_ROLE','roles.ID')
+            ->select('roles.Role_name as name')
             ->where('Username',$username)
             ->first();
         if($role === null){

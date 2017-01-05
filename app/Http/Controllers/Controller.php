@@ -10,4 +10,34 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    public function BadResponse($message = null){
+        if($message == null){
+            $message = 'Parameter is wrong';
+        }
+        return response()->json(['message' => $message], 400);
+    }
+
+    public function ForbiddenResponse($message = null){
+        if($message == null){
+            $message = 'Something went wrong!';
+        }
+        return response()->json(['message' => $message], 403);
+    }
+
+    public function CreatedResponse($data = null){
+        return response()->json($data, 201);
+    }
+
+    public function OKResponse($data = null)
+    {
+        return response()->json($data, 200);
+    }
+
+    public function NotFoundResponse($message = null){
+        if($message == null){
+            $message = 'Not found!';
+        }
+        return response()->json(['message' => $message], 404);
+    }
 }

@@ -21,6 +21,36 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware(['auth:api','scope:user,admin']);
 
+Route::get('/categories', 'CategoryController@index');
+
+Route::get('/categories/{id}', 'CategoryController@show');
+
+Route::post('/categories', 'CategoryController@store')
+    ->middleware(['auth:api','scope:admin']);
+
+Route::put('/categories/{id}', 'CategoryController@update')
+    ->middleware(['auth:api','scope:admin']);
+
+Route::delete('/categories/{id}', 'CategoryController@remove')
+    ->middleware(['auth:api','scope:admin']);
+
+
+
+Route::get('/makers', 'MakerController@index');
+
+Route::get('/makers/{id}', 'MakerController@show');
+
+Route::post('/makers', 'MakerController@store')
+    ->middleware(['auth:api','scope:admin']);
+
+Route::put('/makers/{id}', 'MakerController@update')
+    ->middleware(['auth:api','scope:admin']);
+
+Route::delete('/makers/{id}', 'MakerController@remove')
+    ->middleware(['auth:api','scope:admin']);
+
+
+
 
 
 
