@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
-use Laravel\Socialite\Facades\Socialite;
+//use Laravel\Socialite\Facades\Socialite;
 
 
 class Auth extends Controller
@@ -77,19 +77,20 @@ class Auth extends Controller
             && $request->has('name')
         ){
             $user = new User;
-            $user->id = User::max('id') + 1 ;
-            $user->name = $request->get('name');
-            $user->email = $request->get('username');
-            $user->password = Hash::make($request->get('password'));
+            $user->ID = User::max('ID') + 1 ;
+            $user->ID_CUSTOMER = 1; ////////////////////DUMMY
+            $user->Username = $request->get('username');
+            $user->Password = Hash::make($request->get('password'));
+            $user->ID_ROLE = 2;
 
-            if(User::where('email',$user->email)->exists())
+            if(User::where('Username',$user->Username)->exists())
                 return response()->json([
-                    'message' => 'Email is existed'
+                    'message' => 'Username is existed'
                 ], 403);
 
             $user->save();
             return  response()->json([
-                'username' => $user->email
+                'username' => $user->Username
             ], 200);
         }
         else{
@@ -100,11 +101,11 @@ class Auth extends Controller
     }
 
 
-    public function CheckRole($email){
+    public function CheckRole($username){
         $role =  DB::table('users')
-            ->join('roles','users.role','roles.id')
-            ->select('roles.name as name')
-            ->where('email',$email)
+            ->join('ROLES','users.ID_ROLE','ROLES.ID')
+            ->select('ROLES.Role_name as name')
+            ->where('Username',$username)
             ->first();
         if($role === null){
             $role = 'guest';
