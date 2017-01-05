@@ -14,7 +14,7 @@ class Makers extends Migration
     public function up()
     {
         //
-        Schema::create('MAKERS', function (Blueprint $table) {
+        Schema::create('makers', function (Blueprint $table) {
             $table->increments('ID');
             $table->string('Maker_name');
             $table->timestamps();
@@ -29,6 +29,6 @@ class Makers extends Migration
     public function down()
     {
         //
-        Schema::drop('MAKERS');
+        Schema::drop('makers');
     }
 }

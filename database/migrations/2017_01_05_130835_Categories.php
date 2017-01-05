@@ -14,7 +14,7 @@ class Categories extends Migration
     public function up()
     {
         //
-        Schema::create('CATEGORIES', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->increments('ID');
             $table->string('Category_name');
             $table->timestamps();
@@ -29,6 +29,6 @@ class Categories extends Migration
     public function down()
     {
         //
-        Schema::drop('CATEGORIES');
+        Schema::drop('categories');
     }
 }

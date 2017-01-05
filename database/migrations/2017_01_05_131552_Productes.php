@@ -15,7 +15,7 @@ class Productes extends Migration
     {
         //
         //
-        Schema::create('PRODUCTS', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->increments('ID');
             $table->unsignedInteger('ID_CATEGORY');
             $table->unsignedInteger('ID_MAKER');
@@ -29,8 +29,8 @@ class Productes extends Migration
             $table->timestamps();
 
             //Foreign key
-            $table->foreign('ID_CATEGORY')->references('ID')->on('CATEGORIES');
-            $table->foreign('ID_MAKER')->references('ID')->on('MAKERS');
+            $table->foreign('ID_CATEGORY')->references('ID')->on('categories');
+            $table->foreign('ID_MAKER')->references('ID')->on('makers');
         });
     }
 
@@ -42,6 +42,6 @@ class Productes extends Migration
     public function down()
     {
         //
-        Schema::drop('PRODUCTS');
+        Schema::drop('products');
     }
 }

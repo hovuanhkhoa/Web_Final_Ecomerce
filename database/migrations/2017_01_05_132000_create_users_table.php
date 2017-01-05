@@ -22,8 +22,8 @@ class CreateUsersTable extends Migration
             $table->timestamps();
 
             //Foreign key
-            $table->foreign('ID_CUSTOMER')->references('ID')->on('CUSTOMERS');
-            $table->foreign('ID_ROLE')->references('ID')->on('ROLES');
+            $table->foreign('ID_CUSTOMER')->references('ID')->on('customers');
+            $table->foreign('ID_ROLE')->references('ID')->on('roles');
         });
     }
 

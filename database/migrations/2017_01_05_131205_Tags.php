@@ -14,7 +14,7 @@ class Tags extends Migration
     public function up()
     {
         //
-        Schema::create('TAGS', function (Blueprint $table) {
+        Schema::create('tags', function (Blueprint $table) {
             $table->increments('ID');
             $table->string('Tag_name');
             $table->timestamps();
@@ -29,6 +29,6 @@ class Tags extends Migration
     public function down()
     {
         //
-        Schema::drop('TAGS');
+        Schema::drop('tags');
     }
 }

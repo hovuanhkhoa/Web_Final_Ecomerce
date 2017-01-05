@@ -14,7 +14,7 @@ class Bills extends Migration
     public function up()
     {
         //
-        Schema::create('BILLS', function (Blueprint $table) {
+        Schema::create('bills', function (Blueprint $table) {
             $table->increments('ID');
             $table->unsignedInteger('ID_CUSTOMER');
             $table->string('Receiver_name');
@@ -25,7 +25,7 @@ class Bills extends Migration
             $table->timestamps();
 
             //Foreign key
-            $table->foreign('ID_CUSTOMER')->references('ID')->on('CUSTOMERS');
+            $table->foreign('ID_CUSTOMER')->references('ID')->on('customers');
         });
     }
 
@@ -37,6 +37,6 @@ class Bills extends Migration
     public function down()
     {
         //
-        Schema::drop('BILLS');
+        Schema::drop('bills');
     }
 }

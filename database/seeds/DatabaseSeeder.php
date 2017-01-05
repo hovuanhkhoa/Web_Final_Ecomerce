@@ -41,13 +41,13 @@ class DatabaseSeeder extends Seeder
             'Role_name' => 'admin'
         ];
 
-        DB::table('ROLES')->insert($roleAdmin);
+        DB::table('roles')->insert($roleAdmin);
 
 
 
-        DB::table('ROLES')->insert($roleUser);
+        DB::table('roles')->insert($roleUser);
 
-        DB::table('CUSTOMERS')->insert($customer);
+        DB::table('customers')->insert($customer);
 
         DB::table('users')->insert($user);
 

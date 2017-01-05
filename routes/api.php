@@ -19,7 +19,10 @@ use Laravel\Socialite\Facades\Socialite;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
-})->middleware(['auth:api','scope: admin, user']);
+})->middleware(['auth:api','scope:user,admin']);
+
+
+
 
 
 

@@ -15,14 +15,14 @@ class Carts extends Migration
     {
         //
 
-        Schema::create('CARTS', function (Blueprint $table) {
+        Schema::create('carts', function (Blueprint $table) {
             $table->increments('ID');
             $table->unsignedInteger('ID_CUSTOMER');
             $table->string('Detail');
             $table->timestamps();
 
             //Foreign key
-            $table->foreign('ID_CUSTOMER')->references('ID')->on('CUSTOMERS');
+            $table->foreign('ID_CUSTOMER')->references('ID')->on('customers');
         });
     }
 
@@ -34,6 +34,6 @@ class Carts extends Migration
     public function down()
     {
         //
-        Schema::drop('CARTS');
+        Schema::drop('carts');
     }
 }

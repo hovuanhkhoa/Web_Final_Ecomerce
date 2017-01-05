@@ -74,7 +74,7 @@ class Auth extends Controller
     public function Register(Request $request){
         if($request->has('username')
             && $request->has('password')
-            && $request->has('name')
+            //&& $request->has('name')
         ){
             $user = new User;
             $user->ID = User::max('ID') + 1 ;
