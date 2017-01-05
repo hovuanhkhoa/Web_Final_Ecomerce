@@ -29,6 +29,3 @@ Route::post('/login', 'Auth@Login');
 Route::post('/refresh_token','Auth@RefreshToken');
 
 Route::post('/register','Auth@Register');
-
-Route::get('auth/facebook', 'Auth@redirectToProvider');
-Route::get('auth/facebook/callback', 'Auth@handleProviderCallback');

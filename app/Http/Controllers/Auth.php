@@ -55,22 +55,8 @@ class Auth extends Controller
             && $request->has('client_id')
             && $request->has('client_secret')
             && $request->has('refresh_token')
-            && $request->has('username')
         ){
-
-            $role = $this->CheckRole($request->get('username'));
-
-            if($role === 'admin') {
-                $request->request->add(['scope' => 'admin']);
-            }
-            else if ($role === 'user'){
-                $request->request->add(['scope' => 'user']);
-            }
-            else{
-                $request->request->add(['scope' => 'guest']);
-            }
-
-
+            $request->request->add(['scope' => '']);
             $tokenRequest = Request::create(
                 '/oauth/token',
                 'post'
@@ -91,12 +77,12 @@ class Auth extends Controller
             && $request->has('name')
         ){
             $user = new User;
-            $user->id = User::count() + 1 ;
+            $user->id = User::max('id') + 1 ;
             $user->name = $request->get('name');
             $user->email = $request->get('username');
             $user->password = Hash::make($request->get('password'));
 
-            if(User::where('email',$user->email)->count() > 0)
+            if(User::where('email',$user->email)->exists())
                 return response()->json([
                     'message' => 'Email is existed'
                 ], 403);
@@ -127,27 +113,6 @@ class Auth extends Controller
             $role = $role->name;
         }
         return $role;
-    }
-
-
-    public function redirectToProvider()
-    {
-        return Socialite::driver('facebook')->stateless()->redirect();
-    }
-
-    public function handleProviderCallback()
-    {
-        $user = Socialite::driver('facebook')->stateless()->user();
-
-        return response()->json([
-        'Email' => $user->getEmail()
-    ], 400);
-
-
-        //////Need lưu database
-
-
-        // $user->token;
     }
 
 
