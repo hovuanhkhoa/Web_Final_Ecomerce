@@ -38,7 +38,13 @@ class CategoryController extends Controller
     public function update(Request $request, $id){
         if($request->has('categoryName')){
             try{
+
+                if(Category::where('Category_name',$request->get('categoryName'))->exists()){
+                    return $this->ForbiddenResponse("Category is existed");
+                }
+
                 $category = Category::where('ID', $id)->first();
+
                 $category->Category_name = $request->get('categoryName');
                 $category->save();
             }catch (Exception $ex)

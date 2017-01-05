@@ -50,17 +50,31 @@ Route::delete('/makers/{id}', 'MakerController@remove')
     ->middleware(['auth:api','scope:admin']);
 
 
-Route::get('/medias', 'MediaController@index');
+Route::get('/media', 'MediaController@index');
 
-Route::get('/medias/{id}', 'MediaController@show');
+Route::get('/media/{id}', 'MediaController@show');
 
-Route::post('/medias', 'MediaController@store')
+Route::post('/media', 'MediaController@store')
     ->middleware(['auth:api','scope:admin']);
 
-Route::put('/medias/{id}', 'MediaController@update')
+Route::put('/media/{id}', 'MediaController@update')
     ->middleware(['auth:api','scope:admin']);
 
-Route::delete('/medias/{id}', 'MediaController@remove')
+Route::delete('/media/{id}', 'MediaController@remove')
+    ->middleware(['auth:api','scope:admin']);
+
+
+Route::get('/tags', 'TagController@index');
+
+Route::get('/tags/{id}', 'TagController@show');
+
+Route::post('/tags', 'TagController@store')
+    ->middleware(['auth:api','scope:admin']);
+
+Route::put('/tags/{id}', 'TagController@update')
+    ->middleware(['auth:api','scope:admin']);
+
+Route::delete('/tags/{id}', 'TagController@remove')
     ->middleware(['auth:api','scope:admin']);
 
 

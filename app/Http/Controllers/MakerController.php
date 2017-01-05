@@ -47,7 +47,13 @@ class MakerController extends Controller
     public function update(Request $request, $id){
         if($request->has('makerName')){
             try{
+
                 $makerName = $request->get('makerName');
+
+                if(Maker::where('Maker_name',$makerName)->exists()){
+                    return $this->ForbiddenResponse('Maker is existed!');
+                }
+
                 $maker = Maker::where('ID',$id)->first();
                 if($maker == null){
                     return $this->NotFoundResponse();
