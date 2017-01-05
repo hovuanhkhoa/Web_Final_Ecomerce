@@ -14,7 +14,7 @@ class Medias extends Migration
     public function up()
     {
         //
-        Schema::create('medias', function (Blueprint $table) {
+        Schema::create('media', function (Blueprint $table) {
             $table->increments('ID');
             $table->string('Media_name');
             $table->text('Link');
@@ -30,6 +30,6 @@ class Medias extends Migration
     public function down()
     {
         //
-        Schema::drop('medias');
+        Schema::drop('media');
     }
 }

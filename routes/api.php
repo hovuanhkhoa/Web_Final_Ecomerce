@@ -50,6 +50,19 @@ Route::delete('/makers/{id}', 'MakerController@remove')
     ->middleware(['auth:api','scope:admin']);
 
 
+Route::get('/medias', 'MediaController@index');
+
+Route::get('/medias/{id}', 'MediaController@show');
+
+Route::post('/medias', 'MediaController@store')
+    ->middleware(['auth:api','scope:admin']);
+
+Route::put('/medias/{id}', 'MediaController@update')
+    ->middleware(['auth:api','scope:admin']);
+
+Route::delete('/medias/{id}', 'MediaController@remove')
+    ->middleware(['auth:api','scope:admin']);
+
 
 
 
