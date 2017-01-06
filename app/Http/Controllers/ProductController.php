@@ -209,7 +209,4 @@ class ProductController extends Controller
         return $this->OKResponse(['message'=> 'Removed']);
     }
 
-
-    public function
-
 }
