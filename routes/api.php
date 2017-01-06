@@ -91,6 +91,9 @@ Route::put('/products/{id}', 'ProductController@update')
 Route::delete('/products/{id}', 'ProductController@remove')
     ->middleware(['auth:api','scope:admin']);
 
+Route::get('/me', 'CustomerController@index')
+    ->middleware(['auth:api','scope:admin,user']);
+
 
 
 

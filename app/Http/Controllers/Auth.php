@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Customer;
 use App\User;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
@@ -68,26 +70,44 @@ class Auth extends Controller
     }
 
     public function Register(Request $request){
-        if($request->has('username')
-            && $request->has('password')
-            //&& $request->has('name')
-        ){
-            $user = new User;
-            $user->ID = User::max('ID') + 1 ;
-            $user->ID_CUSTOMER = 1; ////////////////////DUMMY
-            $user->Username = $request->get('username');
-            $user->Password = Hash::make($request->get('password'));
-            $user->ID_ROLE = 2;
+        try {
+            if ($request->has('username')
+                && $request->has('password')
+                && $request->has('customerName')
+                //&& $request->has('identifyNumber')
+                //&& $request->has('phone')
+                //&& $request->has('address')
+            ) {
+                if (User::where('Username', $request->get('username'))->exists())
+                    return $this->ForbiddenResponse('Username is existed');
 
-            if(User::where('Username',$user->Username)->exists())
-                return $this->ForbiddenResponse('Username is existed');
+                //if (Customer::where('Identify_number', $request->get('identifyNumber'))->exists())
+                //    return $this->ForbiddenResponse('Identify_number is existed');
 
-            $user->save();
-            return  $this->CreatedResponse($user);
+                $customer = new Customer();
+                $customer->ID = Customer::max('ID') + 1;
+                $customer->Customer_name = $request->get('customerName');
+                $customer->Identify_number = 'Need fill ' . $request->get('username');
+                $customer->Phone = 'Need fill ' . $request->get('username');
+                $customer->Email = 'Need fill ' . $request->get('username');
+                $customer->Address = 'Need fill ' . $request->get('username');
+                $customer->save();
+
+
+                $user = new User;
+                $user->ID = User::max('ID') + 1;
+                $user->ID_CUSTOMER = $customer->ID;
+                $user->Username = $request->get('username');
+                $user->Password = Hash::make($request->get('password'));
+                $user->ID_ROLE = 2;
+
+                $user->save();
+                return $this->CreatedResponse(['message' => 'Created']);
+            }
+        }catch (Exception $ex){
+            return $this->ForbiddenResponse();
         }
-        else{
-            return $this->BadResponse();
-        }
+        return $this->BadResponse();
     }
 
 
