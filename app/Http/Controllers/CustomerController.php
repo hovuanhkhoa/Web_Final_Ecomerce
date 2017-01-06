@@ -22,6 +22,6 @@ class CustomerController extends Controller
             ->join('customers','customers.ID','users.ID_CUSTOMER')
             ->first();
 
-        return $me;
+        return $this->OKResponse($me);
     }
 }

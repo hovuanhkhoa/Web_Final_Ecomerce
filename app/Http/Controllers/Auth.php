@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Cart;
 use App\Customer;
 use App\User;
 
@@ -92,6 +93,12 @@ class Auth extends Controller
                 $customer->Email = 'Need fill ' . $request->get('username');
                 $customer->Address = 'Need fill ' . $request->get('username');
                 $customer->save();
+
+                $cart = new Cart();
+                $cart->ID = Cart::max('ID') + 1;
+                $cart->ID_CUSTOMER = $customer->ID;
+                $cart->Detail = '';
+                $cart->save();
 
 
                 $user = new User;

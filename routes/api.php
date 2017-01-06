@@ -91,9 +91,30 @@ Route::put('/products/{id}', 'ProductController@update')
 Route::delete('/products/{id}', 'ProductController@remove')
     ->middleware(['auth:api','scope:admin']);
 
+
+
+
 Route::get('/me', 'CustomerController@index')
     ->middleware(['auth:api','scope:admin,user']);
 
+
+
+
+
+Route::get('/me/cart', 'CartController@MyCart')
+    ->middleware(['auth:api','scope:admin,user']);
+
+Route::get('/me/cart/items', 'CartController@MyItemInCart')
+    ->middleware(['auth:api','scope:admin,user']);
+
+Route::post('/me/cart/items', 'CartController@AddItemToCart')
+    ->middleware(['auth:api','scope:admin,user']);
+
+Route::put('/me/cart/items/{id}', 'CartController@updateItemInCart')
+    ->middleware(['auth:api','scope:admin,user']);
+
+Route::delete('/me/cart/items/{id}', 'CartController@RemoveItemFromCart')
+    ->middleware(['auth:api','scope:admin,user']);
 
 
 
