@@ -120,6 +120,10 @@ Route::delete('/me/cart/items/{id}', 'CartController@RemoveItemFromCart')
     ->middleware(['auth:api','scope:admin,user']);
 
 
+Route::get('/search', 'ProductController@search');
+
+
+
 
 
 
