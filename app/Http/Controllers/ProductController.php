@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
+use App\Maker;
 use App\Media;
 use App\Product;
 use App\Tag;
@@ -72,6 +74,7 @@ class ProductController extends Controller
                 'Maker_name as makerName',
                 'Media_set as media',
                 'ID_TAG as tags')
+                ->where('products.ID',$id)
                 ->join('categories', 'categories.ID', 'products.ID_CATEGORY')
                 ->join('makers', 'makers.ID', 'products.ID_MAKER')->first();
 
@@ -108,45 +111,87 @@ class ProductController extends Controller
     }
 
     public function store(Request $request){//need repair
-        return $this->ForbiddenResponse();
-        if($request->has('tagName')){
-            if(Tag::where('Tag_name',$request->get('tagName'))->exists()){
-                return $this->ForbiddenResponse("Tag_name is existed");
+        if($request->has('productName')
+            && $request->has('detail')
+            && $request->has('mediaSet')
+            && $request->has('price')
+            && $request->has('quantity')
+            && $request->has('idMaker')
+            && $request->has('idCategory')
+            && $request->has('idTag')){
+            try {
+
+                $idTag = str_replace(' ', '', $request->get('idTag'));
+                $idTagArray = explode(',', $idTag);
+
+                if (Tag::whereIn('ID', $idTagArray)->get()->count() < count($idTagArray))
+                    return $this->NotFoundResponse('ID_TAG not found');
+
+                if (!Maker::where('ID', $request->get('idMaker'))->exists())
+                    return $this->NotFoundResponse('ID_MAKER not found');
+
+                if (!Category::where('ID', $request->get('idCategory'))->exists())
+                    return $this->NotFoundResponse('ID_CATEGORY not found');
+
+                $product = new Product();
+                $product->ID = Product::max('ID') + 1;
+                $product->Product_name = $request->get('productName');
+                $product->Detail = $request->get('detail');
+                $product->Media_set = $request->get('mediaSet');
+                $product->Price = $request->get('price');
+                $product->Quantity = $request->get('quantity');
+                $product->ID_MAKER = $request->get('idMaker');
+                $product->ID_CATEGORY = $request->get('idCategory');
+                $product->ID_TAG = $request->get('idTag');
+                $product->save();
+            }catch (Exception $ex){
+                return $this->BadResponse();
             }
-
-            $tag = new Tag();
-            $tag->ID = Tag::max('ID') + 1;
-            $tag->Tag_name = $request->get('tagName');
-
-            $tag->save();
-            return $this->OKResponse(Tag::select('ID as id','Tag_name as tagName')
-                ->where('ID',$tag->ID)->first());
+            return $this->show($product->ID);
         }
         return $this->BadResponse();
     }
 
 
     public function update(Request $request, $id){//need repair
-        return $this->ForbiddenResponse();
-        if($request->has('tagName')){
+        if($request->has('productName')
+            && $request->has('detail')
+            && $request->has('mediaSet')
+            && $request->has('price')
+            && $request->has('quantity')
+            && $request->has('idMaker')
+            && $request->has('idCategory')
+            && $request->has('idTag')){
             try {
-                $tag = Tag::where('ID', $id)->first();
-                if ($tag == null) {
-                    $this->NotFoundResponse();
-                }
 
-                if(Tag::where('Tag_name',$request->get('tagName'))->exists()){
-                    return $this->ForbiddenResponse("Tag_name is existed");
-                }
+                $idTag = str_replace(' ', '', $request->get('idTag'));
+                $idTagArray = explode(',', $idTag);
 
-                $tag->Tag_name = $request->get('tagName');
+                if (Tag::whereIn('ID', $idTagArray)->get()->count() < count($idTagArray))
+                    return $this->NotFoundResponse('ID_TAG not found');
 
-                $tag->save();
+                if (!Maker::where('ID', $request->get('idMaker'))->exists())
+                    return $this->NotFoundResponse('ID_MAKER not found');
+
+                if (!Category::where('ID', $request->get('idCategory'))->exists())
+                    return $this->NotFoundResponse('ID_CATEGORY not found');
+
+                $product = Product::where('ID', $id)->first();
+                $product->Product_name = $request->get('productName');
+                $product->Detail = $request->get('detail');
+                $product->Media_set = $request->get('mediaSet');
+                $product->Price = $request->get('price');
+                $product->Quantity = $request->get('quantity');
+                $product->ID_MAKER = $request->get('idMaker');
+                $product->ID_CATEGORY = $request->get('idCategory');
+                $product->ID_TAG = $request->get('idTag');
+
+                $product->save();
             }catch (Exception $ex){
                 return $this->NotFoundResponse();
             }
-            return $this->OKResponse(Tag::select('ID as id','Tag_name as tagName')
-                ->where('ID',$tag->ID)->first());
+
+            return $this->show($id);
         }
         return $this->BadResponse();
     }
@@ -163,5 +208,8 @@ class ProductController extends Controller
         }
         return $this->OKResponse(['message'=> 'Removed']);
     }
+
+
+    public function
 
 }
