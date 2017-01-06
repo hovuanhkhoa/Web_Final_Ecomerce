@@ -78,6 +78,20 @@ Route::delete('/tags/{id}', 'TagController@remove')
     ->middleware(['auth:api','scope:admin']);
 
 
+Route::get('/products', 'ProductController@index');
+
+Route::get('/products/{id}', 'ProductController@show');
+
+Route::post('/products', 'ProductController@store')
+    ->middleware(['auth:api','scope:admin']);
+
+Route::put('/products/{id}', 'ProductController@update')
+    ->middleware(['auth:api','scope:admin']);
+
+Route::delete('/products/{id}', 'ProductController@remove')
+    ->middleware(['auth:api','scope:admin']);
+
+
 
 
 
