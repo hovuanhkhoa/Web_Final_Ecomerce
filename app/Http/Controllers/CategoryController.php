@@ -130,7 +130,7 @@ class CategoryController extends Controller
         //dd($products);
         $result = [];
         foreach($products as $product){
-            $jsonD = json_decode($product->detail);
+            $jsonD = json_decode($product->details);
             //dd($jsonD->os);
             if($os != null && $jsonD->os != null  && strpos(strtolower($jsonD->os),strtolower($os)) === false){
                 continue;
@@ -201,7 +201,7 @@ class CategoryController extends Controller
         try{
             $products = Product::select('products.ID as id',
                 'Product_name as productName',
-                'Detail as detail',
+                'Detail as details',
                 'Price as price',
                 'Quantity as quantity',
                 'Category_name as categoryName',

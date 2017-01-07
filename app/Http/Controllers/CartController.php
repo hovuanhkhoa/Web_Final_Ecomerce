@@ -15,7 +15,7 @@ class CartController extends Controller
     public function MyCart(Request $request){
         try {
             $user = $request->user();
-            $cart = User::select('carts.ID as id', 'carts.Detail as detail')
+            $cart = User::select('carts.ID as id', 'carts.Detail as details')
                 ->where('users.ID', $user->ID)
                 ->join('customers', 'customers.ID', 'users.ID_CUSTOMER')
                 ->join('carts', 'carts.ID_CUSTOMER', 'customers.ID')->first();
@@ -23,8 +23,8 @@ class CartController extends Controller
                 return $this->NotFoundResponse();
 
             $detailArray = [];
-            if ($cart->detail != "") {
-                $detail = $cart->detail;
+            if ($cart->details != "") {
+                $detail = $cart->details;
                 $productArray = explode('|', $detail);
                 foreach ($productArray as $product) {
                     $pos1 = strpos($product,',');
@@ -35,7 +35,7 @@ class CartController extends Controller
                         'Category_name as categoryName',
                         'Maker_name as makerName',
                         'Product_name as productName',
-                        'Detail as detail',
+                        'Detail as details',
                         'Price as price',
                         'Quantity as quantity')->where('products.ID', $idProduct)
                         ->join('categories', 'categories.ID', 'products.ID_CATEGORY')
@@ -44,7 +44,7 @@ class CartController extends Controller
                     array_push($detailArray, $temp);
                 }
             }
-            $cart->detail = $detailArray;
+            $cart->details = $detailArray;
         }catch (Exception $ex){
             return $this->ForbiddenResponse();
         }
@@ -54,7 +54,7 @@ class CartController extends Controller
     public function MyItemsInCart(Request $request){
         try {
             $user = $request->user();
-            $cart = User::select('carts.ID as id', 'carts.Detail as detail')
+            $cart = User::select('carts.ID as id', 'carts.Detail as details')
                 ->where('users.ID', $user->ID)
                 ->join('customers', 'customers.ID', 'users.ID_CUSTOMER')
                 ->join('carts', 'carts.ID_CUSTOMER', 'customers.ID')->first();
@@ -62,8 +62,8 @@ class CartController extends Controller
                 return $this->NotFoundResponse();
 
             $detailArray = [];
-            if ($cart->detail != "") {
-                $detail = $cart->detail;
+            if ($cart->details != "") {
+                $detail = $cart->details;
                 $productArray = explode('|', $detail);
                 foreach ($productArray as $product) {
                     $pos1 = strpos($product,',');
@@ -74,7 +74,7 @@ class CartController extends Controller
                         'Category_name as categoryName',
                         'Maker_name as makerName',
                         'Product_name as productName',
-                        'Detail as detail',
+                        'Detail as details',
                         'Price as price',
                         'Quantity as quantity')->where('products.ID', $idProduct)
                         ->join('categories', 'categories.ID', 'products.ID_CATEGORY')
@@ -93,7 +93,7 @@ class CartController extends Controller
     public function MyItemInCart(Request $request, $id){
         try {
             $user = $request->user();
-            $cart = User::select('carts.ID as id', 'carts.Detail as detail')
+            $cart = User::select('carts.ID as id', 'carts.Detail as details')
                 ->where('users.ID', $user->ID)
                 ->join('customers', 'customers.ID', 'users.ID_CUSTOMER')
                 ->join('carts', 'carts.ID_CUSTOMER', 'customers.ID')->first();
@@ -101,12 +101,12 @@ class CartController extends Controller
                 return $this->NotFoundResponse();
 
             $temp = '';
-            $pos1 = strpos($cart->detail, $id . ',');
-            if ($cart->detail != "" && $pos1 !== false) {
+            $pos1 = strpos($cart->details, $id . ',');
+            if ($cart->details != "" && $pos1 !== false) {
 
                 $pos2 = strpos($cart->detail,'|',$pos1 + 1);
-                if($pos2 === false) $pos2 = strlen($cart->detail);
-                $quantityProduct = substr($cart->detail,
+                if($pos2 === false) $pos2 = strlen($cart->details);
+                $quantityProduct = substr($cart->details,
                     $pos1 + strlen($id . ','),
                     $pos2 - $pos1 - strlen($id . ','));
 
@@ -114,7 +114,7 @@ class CartController extends Controller
                     'Category_name as categoryName',
                     'Maker_name as makerName',
                     'Product_name as productName',
-                    'Detail as detail',
+                    'Detail as details',
                     'Price as price',
                     'Quantity as quantity')->where('products.ID', $id)
                     ->join('categories', 'categories.ID', 'products.ID_CATEGORY')

@@ -40,4 +40,11 @@ class Controller extends BaseController
         }
         return response()->json(['message' => $message], 404);
     }
+
+    public function UnAuthentication($message = null){
+        if($message == null){
+            $message = 'UnAuthentication!';
+        }
+        return response()->json(['message' => $message], 401);
+    }
 }

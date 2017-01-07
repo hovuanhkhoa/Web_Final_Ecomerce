@@ -20,7 +20,7 @@ class ProductController extends Controller
         try {
             $products = Product::select('products.ID as id',
                 'Product_name as productName',
-                'Detail as detail',
+                'Detail as details',
                 'Price as price',
                 'Quantity as quantity',
                 'Category_name as categoryName',
@@ -69,7 +69,7 @@ class ProductController extends Controller
         try {
             $product = Product::select('products.ID as id',
                 'Product_name as productName',
-                'Detail as detail',
+                'Detail as details',
                 'Price as price',
                 'Quantity as quantity',
                 'Category_name as categoryName',
@@ -114,7 +114,7 @@ class ProductController extends Controller
 
     public function store(Request $request){//need repair
         if($request->has('productName')
-            && $request->has('detail')
+            && $request->has('details')
             && $request->has('mediaSet')
             && $request->has('price')
             && $request->has('quantity')
@@ -138,7 +138,7 @@ class ProductController extends Controller
                 $product = new Product();
                 $product->ID = Product::max('ID') + 1;
                 $product->Product_name = $request->get('productName');
-                $product->Detail = $request->get('detail');
+                $product->Detail = $request->get('details');
                 $product->Media_set = $request->get('mediaSet');
                 $product->Price = $request->get('price');
                 $product->Quantity = $request->get('quantity');
@@ -157,7 +157,7 @@ class ProductController extends Controller
 
     public function update(Request $request, $id){//need repair
         if($request->has('productName')
-            && $request->has('detail')
+            && $request->has('details')
             && $request->has('mediaSet')
             && $request->has('price')
             && $request->has('quantity')
@@ -180,7 +180,7 @@ class ProductController extends Controller
 
                 $product = Product::where('ID', $id)->first();
                 $product->Product_name = $request->get('productName');
-                $product->Detail = $request->get('detail');
+                $product->Detail = $request->get('details');
                 $product->Media_set = $request->get('mediaSet');
                 $product->Price = $request->get('price');
                 $product->Quantity = $request->get('quantity');
@@ -230,7 +230,7 @@ class ProductController extends Controller
             if(count($productID) >0) {
                 $products = Product::select('products.ID as id',
                     'Product_name as productName',
-                    'Detail as detail',
+                    'Detail as details',
                     'Price as price',
                     'Quantity as quantity',
                     'Category_name as categoryName',
