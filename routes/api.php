@@ -123,6 +123,10 @@ Route::delete('/me/cart/items/{id}', 'CartController@RemoveItemFromCart')
 Route::get('/search', 'ProductController@search');
 
 
+Route::get('/featured-products', 'ProductController@FeatureProducts');
+
+
+
 
 
 

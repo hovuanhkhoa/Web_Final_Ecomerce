@@ -22,7 +22,7 @@ class Productes extends Migration
             $table->string('Product_name');
             $table->text('Detail');
             $table->text('Media_set');
-            $table->float('Price');
+            $table->unsignedInteger('Price');
             $table->unsignedInteger('Quantity');
             $table->text('ID_TAG');
 
