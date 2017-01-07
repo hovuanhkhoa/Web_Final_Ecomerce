@@ -124,8 +124,15 @@ class CategoryController extends Controller
         $maxBR =$this->getFromRequest($request,'maxBackCameraRes');
         $minPin = $this->getFromRequest($request,'minPinCapacity');
         $maxPin =$this->getFromRequest($request,'maxPinCapacity');
-        $minSize =$this->getFromRequest($request,'minScreenSize');
-        $maxSize =$this->getFromRequest($request,'maxScreenSize');
+        $minScreenSize =$this->getFromRequest($request,'minScreenSize');
+        $maxScreenSize =$this->getFromRequest($request,'maxScreenSize');
+        $minHdd =$this->getFromRequest($request,'minHddSize');
+        $maxHdd =$this->getFromRequest($request,'maxHddSize');
+        $minSize =$this->getFromRequest($request,'minSize');
+        $maxSize =$this->getFromRequest($request,'maxSize');
+        $type =$this->getFromRequest($request,'type');
+
+
 
         //dd($products);
         $result = [];
@@ -133,6 +140,10 @@ class CategoryController extends Controller
             $jsonD = json_decode($product->details);
             //dd($jsonD->os);
             if($os != null && $jsonD->os != null  && strpos(strtolower($jsonD->os),strtolower($os)) === false){
+                continue;
+            }
+
+            if($type != null && $jsonD->type != null  && strpos(strtolower($jsonD->type),strtolower($type)) === false){
                 continue;
             }
 
@@ -176,11 +187,27 @@ class CategoryController extends Controller
                 continue;
             }
 
-            if($minSize != null && $jsonD->screenSize != null && floatval($jsonD->screenSize) < floatval($minSize)){
+            if($minScreenSize != null && $jsonD->screenSize != null && floatval($jsonD->screenSize) < floatval($minScreenSize)){
                 continue;
             }
 
-            if($maxSize != null && $jsonD->screenSize != null && floatval($jsonD->screenSize) > floatval($maxSize)){
+            if($maxScreenSize != null && $jsonD->screenSize != null && floatval($jsonD->screenSize) > floatval($maxScreenSize)){
+                continue;
+            }
+
+            if($minHdd != null && $jsonD->hddSize != null && floatval($jsonD->hddSize) < floatval($minHdd)){
+                continue;
+            }
+
+            if($maxHdd != null && $jsonD->hddSize != null && floatval($jsonD->hddSize) > floatval($maxHdd)){
+                continue;
+            }
+
+            if($minSize != null && $jsonD->size != null && floatval($jsonD->size) < floatval($minSize)){
+                continue;
+            }
+
+            if($maxSize != null && $jsonD->size != null && floatval($jsonD->size) > floatval($maxSize)){
                 continue;
             }
 
