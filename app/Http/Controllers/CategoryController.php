@@ -78,6 +78,18 @@ class CategoryController extends Controller
     }
 
     public function Filter(Request $request, $products){
+        if($request->get('maker') != null && $request->get('maker') != ""){
+            $products->where('Maker_name',$request->get('maker'));
+        }
+
+        if($request->get('minPrice') != null && $request->get('minPrice') != ""){
+            $products->where('Price','>=',$request->get('minPrice'));
+        }
+
+        if($request->get('maxPrice') != null && $request->get('maxPrice') != ""){
+            $products->where('Price','<=',$request->get('maxPrice'));
+        }
+
         if($request->get('offset') != null && $request->get('offset') != ""){
             $products->offset($request->get('offset'));
         }
@@ -88,27 +100,16 @@ class CategoryController extends Controller
 
         if($request->get('sort') != null && $request->get('sort') != ""){
             $sort = $request->get('sort');
-
             $sortName = substr($sort,1);
-            if($sortName == "date") $sortName = 'updated_at';
-
-            if($sort[0] == '+'){
-                $products->orderBy($sortName, 'asc');
-            }else{
+            if($sortName == "ate" || $sortName == '-date')
+                $sortName = 'products.updated_at';
+            else
+                $sortName = 'Price';
+            if($sort[0] == '-'){
                 $products->orderBy($sortName, 'desc');
+            }else{
+                $products->orderBy($sortName, 'asc');
             }
-        }
-
-        if($request->get('maker') != null && $request->get('maker') != ""){
-            $products->where('makerName',$request->get('maker'));
-        }
-
-        if($request->get('minPrice') != null && $request->get('minPrice') != ""){
-            $products->where('price','>=',$request->get('minPrice'));
-        }
-
-        if($request->get('maxPrice') != null && $request->get('maxPrice') != ""){
-            $products->where('makerName','<=',$request->get('maxPrice'));
         }
 
         $products = $products->get();
@@ -239,7 +240,15 @@ class CategoryController extends Controller
                 ->join('categories', 'categories.ID', 'products.ID_CATEGORY')
                 ->join('makers', 'makers.ID', 'products.ID_MAKER');
 
+
+
+
             $products = $this->Filter($request, $products);
+
+            $offset = $request->get('offset') == null? 0: (int)$request->get('offset');
+            $limit = $request->get('limit') == null? 0 : (int)$request->get('limit');
+
+            $count = count($products) - ($offset + $limit);
 
             if($products == null){
                 return $this->NotFoundResponse();
@@ -277,6 +286,6 @@ class CategoryController extends Controller
         }catch (Exception $ex){
             return $this->NotFoundResponse();
         }
-        return $this->OKResponse($products);
+        return $this->OKResponse($products,["remaining" => $count]);
     }
 }

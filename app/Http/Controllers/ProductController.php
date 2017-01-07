@@ -397,6 +397,26 @@ class ProductController extends Controller
     }
 
 
+    public function RelatedProduct($id){
+        try{
+
+        }catch (Exception $ex){
+            return $this->NotFoundResponse();
+        }
+    }
+
+    public function RelatedAccessory($id){
+        try{
+
+        }catch (Exception $ex){
+            return $this->NotFoundResponse();
+        }
+
+
+
+    }
+
+
 
 
 

@@ -29,9 +29,9 @@ class Controller extends BaseController
         return response()->json($data, 201);
     }
 
-    public function OKResponse($data = null)
+    public function OKResponse($data = null,$header = [])
     {
-        return response()->json($data, 200);
+        return response()->json($data, 200,$header);
     }
 
     public function NotFoundResponse($message = null){
