@@ -295,10 +295,26 @@ class ProductController extends Controller
                 ->join('categories', 'categories.ID', 'products.ID_CATEGORY')
                 ->join('makers', 'makers.ID', 'products.ID_MAKER')->get();
 
+
+            $result = [];
+
             foreach ($products as $product) {
 
                 $tagSet = [];
                 $mediaSet = [];
+                $flag = true;
+
+                $tagArray = explode(',', $product->tags);
+                foreach ($tagArray as $tag) {
+                    $temp = Tag::select('Tag_name as tagName')->where('ID', $tag)->first();
+                    if(strtolower($temp->tagName) == strtolower('Main Product'))
+                        $flag = false;
+                    array_push($tagSet, $temp);
+                }
+
+
+                if($flag) continue;
+
 
                 $mediaArray = explode(',', $product->media);
                 foreach ($mediaArray as $media) {
@@ -311,23 +327,73 @@ class ProductController extends Controller
                     }
                 }
 
+                $product->tags = $tagSet;
+                $product->media = $mediaSet;
+                array_push($result, $product);
+            }
+        }catch (Exception $ex){
+            return $this->NotFoundResponse();
+        }
+        return $this->OKResponse($result);
+    }
+
+
+    public function FeatureAccessories(Request $request){
+        try {
+            $start = Carbon::now();
+
+            $end = $start->copy()->addDays(-1);
+
+            $products = Product::select('products.ID as id',
+                'Product_name as productName',
+                'Price as price',
+                'Quantity as quantity',
+                'Category_name as categoryName',
+                'Maker_name as makerName',
+                'Media_set as media',
+                'ID_TAG as tags')
+                ->where('products.created_at','>=',$end)
+                ->join('categories', 'categories.ID', 'products.ID_CATEGORY')
+                ->join('makers', 'makers.ID', 'products.ID_MAKER')->get();
+
+
+            $result = [];
+
+            foreach ($products as $product) {
+
+                $tagSet = [];
+                $mediaSet = [];
+                $flag = true;
+
                 $tagArray = explode(',', $product->tags);
                 foreach ($tagArray as $tag) {
-                    $temp = Tag::select('Tag_name as tagName')->where('ID', $tag)->get();
+                    $temp = Tag::select('Tag_name as tagName')->where('ID', $tag)->first();
+                    if(strtolower($temp->tagName) == strtolower('Accessory'))
+                        $flag = false;
+                    array_push($tagSet, $temp);
+                }
+
+                if($flag) continue;
+
+                $mediaArray = explode(',', $product->media);
+                foreach ($mediaArray as $media) {
+                    $temp = Media::select('Media_name as mediaName', 'Link as link')
+                        ->where('Media_name', $product->id . '_' . $media)->get();
                     if ($temp != null) {
                         foreach ($temp as $t) {
-                            array_push($tagSet, $t);
+                            array_push($mediaSet, $t);
                         }
                     }
                 }
 
                 $product->tags = $tagSet;
                 $product->media = $mediaSet;
+                array_push($result, $product);
             }
         }catch (Exception $ex){
             return $this->NotFoundResponse();
         }
-        return $this->OKResponse($products);
+        return $this->OKResponse($result);
     }
 
 
