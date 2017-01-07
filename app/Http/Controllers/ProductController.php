@@ -8,7 +8,9 @@ use App\Media;
 use App\Product;
 use App\Tag;
 use Exception;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -273,5 +275,63 @@ class ProductController extends Controller
         }
         return $this->NotFoundResponse();
     }
+
+
+    public function FeatureProducts(Request $request){
+        try {
+            $start = Carbon::now();
+
+            $end = $start->copy()->addDays(-1);
+
+            $products = Product::select('products.ID as id',
+                'Product_name as productName',
+                'Price as price',
+                'Quantity as quantity',
+                'Category_name as categoryName',
+                'Maker_name as makerName',
+                'Media_set as media',
+                'ID_TAG as tags')
+                ->where('products.created_at','>=',$end)
+                ->join('categories', 'categories.ID', 'products.ID_CATEGORY')
+                ->join('makers', 'makers.ID', 'products.ID_MAKER')->get();
+
+            foreach ($products as $product) {
+
+                $tagSet = [];
+                $mediaSet = [];
+
+                $mediaArray = explode(',', $product->media);
+                foreach ($mediaArray as $media) {
+                    $temp = Media::select('Media_name as mediaName', 'Link as link')
+                        ->where('Media_name', $product->id . '_' . $media)->get();
+                    if ($temp != null) {
+                        foreach ($temp as $t) {
+                            array_push($mediaSet, $t);
+                        }
+                    }
+                }
+
+                $tagArray = explode(',', $product->tags);
+                foreach ($tagArray as $tag) {
+                    $temp = Tag::select('Tag_name as tagName')->where('ID', $tag)->get();
+                    if ($temp != null) {
+                        foreach ($temp as $t) {
+                            array_push($tagSet, $t);
+                        }
+                    }
+                }
+
+                $product->tags = $tagSet;
+                $product->media = $mediaSet;
+            }
+        }catch (Exception $ex){
+            return $this->NotFoundResponse();
+        }
+        return $this->OKResponse($products);
+    }
+
+
+
+
 
 }
