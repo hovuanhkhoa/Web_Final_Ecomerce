@@ -2,6 +2,7 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: origin, x-requested-with, content-type, Authorization');
 header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
+header('Access-Control-Expose-Headers: remaining');
 
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
@@ -130,6 +131,11 @@ Route::get('/featured-products', 'ProductController@FeatureProducts');
 
 Route::get('/featured-accessories', 'ProductController@FeatureAccessories');
 
+
+Route::get('products/{id}/related-product', 'ProductController@RelatedProduct');
+
+Route::get('products/{id}/related-accessories', 'ProductController@RelatedAccessory');
+
 Route::post('/me/cart/checkout', 'CartController@checkout')
     ->middleware(['auth:api','scope:admin,user']);
 
@@ -151,11 +157,6 @@ Route::put('/bills/{id}', 'BillController@update')
 
 Route::delete('/bills/{id}', 'BillController@remove')
     ->middleware(['auth:api','scope:admin']);
-
-
-
-
-
 
 
 

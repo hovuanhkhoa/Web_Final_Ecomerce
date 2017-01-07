@@ -307,7 +307,8 @@ class ProductController extends Controller
                 $tagArray = explode(',', $product->tags);
                 foreach ($tagArray as $tag) {
                     $temp = Tag::select('Tag_name as tagName')->where('ID', $tag)->first();
-                    if(strtolower($temp->tagName) == strtolower('Main Product'))
+                    //dd($temp->tagName);
+                    if(strpos(strtolower($temp->tagName), strtolower('Sản phẩm chính')) !== false)
                         $flag = false;
                     array_push($tagSet, $temp);
                 }
@@ -368,7 +369,7 @@ class ProductController extends Controller
                 $tagArray = explode(',', $product->tags);
                 foreach ($tagArray as $tag) {
                     $temp = Tag::select('Tag_name as tagName')->where('ID', $tag)->first();
-                    if(strtolower($temp->tagName) == strtolower('Accessory'))
+                    if(strpos(strtolower($temp->tagName), strtolower('Phụ kiện')) !== false)
                         $flag = false;
                     array_push($tagSet, $temp);
                 }
@@ -398,22 +399,134 @@ class ProductController extends Controller
 
 
     public function RelatedProduct($id){
-        try{
+        try{//Cùng nhà sản xuất, cùng mức giá
+            $product1 = Product::where('ID',$id)->first();
+            $products = Product::select('products.ID as id',
+                'Product_name as productName',
+                'Price as price',
+                'Detail as details',
+                'Quantity as quantity',
+                'Category_name as categoryName',
+                'Maker_name as makerName',
+                'Media_set as media',
+                'ID_TAG as tags'
+            )->where(function($query) use ($product1)
+                {
+                    $query->where('Price', '<', (int)$product1->Price + 1000000);
+                    $query->where('Price', '>', (int)$product1->Price - 1000000);
+                })
+                ->orWhere('ID_MAKER', $product1->ID_MAKER)
+                ->join('categories', 'categories.ID', 'products.ID_CATEGORY')
+                ->join('makers', 'makers.ID', 'products.ID_MAKER')->get();
 
+            $result = [];
+
+            foreach ($products as $product) {
+
+                $tagSet = [];
+                $mediaSet = [];
+
+                $tagArray = explode(',', $product->tags);
+                foreach ($tagArray as $tag) {
+                    $temp = Tag::select('Tag_name as tagName')->where('ID', $tag)->first();
+                    array_push($tagSet, $temp);
+                }
+
+                $mediaArray = explode(',', $product->media);
+                foreach ($mediaArray as $media) {
+                    $temp = Media::select('Media_name as mediaName', 'Link as link')
+                        ->where('Media_name', $product->id . '_' . $media)->get();
+                    if ($temp != null) {
+                        foreach ($temp as $t) {
+                            array_push($mediaSet, $t);
+                        }
+                    }
+                }
+
+                $product->tags = $tagSet;
+                $product->media = $mediaSet;
+                array_push($result, $product);
+            }
+            return $this->OKResponse($result);
         }catch (Exception $ex){
             return $this->NotFoundResponse();
         }
     }
 
     public function RelatedAccessory($id){
-        try{
+        try {
+            //Phụ kiện tương thích sp
+            $pd = Product::where('ID', $id)->first();
+            $tagArray = explode(',', $pd->ID_TAG);
+            $searchArray = [];
+            foreach ($tagArray as $tag) {
+                if ((int)$tag == 6) break;
+                if ((int)$tag <= 7) continue;
+                array_push($searchArray, $tag);
+            }
 
+            $arrayProduct = [];
+            $products = Product::select('products.ID as id',
+                'ID_TAG as tags')->get();
+
+            foreach ($searchArray as $sTag) {
+                foreach($products as $p) {
+                    $tagArray = explode(',', $p->tags);
+                    $f = true;
+                    $ff = false;
+                    foreach ($tagArray as $tag) {
+                        if ((int)$tag == 7) {
+                            $f = false;
+                            break;
+                        }
+                        if ((int)$tag == (int)$sTag) {
+                            $ff = true;
+                        }
+                    }
+                    if ($f && $ff) {
+                        $product = Product::select('products.ID as id',
+                            'Product_name as productName',
+                            'Price as price',
+                            'Detail as details',
+                            'Quantity as quantity',
+                            'Category_name as categoryName',
+                            'Maker_name as makerName',
+                            'Media_set as media',
+                            'ID_TAG as tags'
+                        )->where("products.ID",$p->id)
+                            ->join('categories', 'categories.ID', 'products.ID_CATEGORY')
+                            ->join('makers', 'makers.ID', 'products.ID_MAKER')->first();
+
+                        $tagSet = [];
+                        $mediaSet = [];
+
+
+                        $tagArray = explode(',', $product->tags);
+                        foreach ($tagArray as $tag) {
+                            $temp = Tag::select('Tag_name as tagName')->where('ID', $tag)->first();
+                            array_push($tagSet, $temp);
+                        }
+                        $mediaArray = explode(',', $product->media);
+                        foreach ($mediaArray as $media) {
+                            $temp = Media::select('Media_name as mediaName', 'Link as link')
+                                ->where('Media_name', $product->id . '_' . $media)->get();
+                            if ($temp != null) {
+                                foreach ($temp as $t) {
+                                    array_push($mediaSet, $t);
+                                }
+                            }
+                        }
+                        $product->tags = $tagSet;
+                        $product->media = $mediaSet;
+                        array_push($arrayProduct, $product);
+                    }
+                }
+            }
+
+            return $this->OKResponse($arrayProduct);
         }catch (Exception $ex){
             return $this->NotFoundResponse();
         }
-
-
-
     }
 
 

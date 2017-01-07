@@ -79,7 +79,8 @@ class CategoryController extends Controller
 
     public function Filter(Request $request, $products){
         if($request->get('maker') != null && $request->get('maker') != ""){
-            $products->where('Maker_name',$request->get('maker'));
+            $makerArray = explode(',',str_replace(' ','',$request->get('maker')));
+            $products->whereIn('Maker_name',$makerArray);
         }
 
         if($request->get('minPrice') != null && $request->get('minPrice') != ""){
@@ -140,12 +141,27 @@ class CategoryController extends Controller
         foreach($products as $product){
             $jsonD = json_decode($product->details);
             //dd($jsonD->os);
-            if($os != null && $jsonD->os != null  && strpos(strtolower($jsonD->os),strtolower($os)) === false){
-                continue;
+
+            if($os != null && $jsonD->os != null){
+                $arrayOs = explode(',',str_replace(' ','',$os));
+                $flag = true;
+                foreach($arrayOs as $aOS){
+                    if(strpos(strtolower($jsonD->os),strtolower($aOS)) !== false) {
+                        $flag = false;
+                    }
+                }
+                if($flag) continue;
             }
 
-            if($type != null && $jsonD->type != null  && strpos(strtolower($jsonD->type),strtolower($type)) === false){
-                continue;
+            if($type != null && $jsonD->type != null  ) {
+                $arrayType = explode(',', str_replace(' ', '', $type));
+                $flag = true;
+                foreach ($arrayType as $t) {
+                    if (strpos(strtolower($jsonD->type), strtolower($t)) !== false) {
+                        $flag = false;
+                    }
+                }
+                if ($flag) continue;;
             }
 
             if($minRam != null && $jsonD->ram != null && $jsonD->ram < $minRam){
@@ -249,6 +265,7 @@ class CategoryController extends Controller
             $limit = $request->get('limit') == null? 0 : (int)$request->get('limit');
 
             $count = count($products) - ($offset + $limit);
+            if($count < 0) $count = 0;
 
             if($products == null){
                 return $this->NotFoundResponse();
