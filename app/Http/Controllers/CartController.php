@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Bill;
 use App\Cart;
 use App\Product;
 use App\User;
@@ -97,15 +98,14 @@ class CartController extends Controller
                 ->where('users.ID', $user->ID)
                 ->join('customers', 'customers.ID', 'users.ID_CUSTOMER')
                 ->join('carts', 'carts.ID_CUSTOMER', 'customers.ID')->first();
-            if($cart == null)
+            if ($cart == null)
                 return $this->NotFoundResponse();
 
             $temp = '';
             $pos1 = strpos($cart->details, $id . ',');
             if ($cart->details != "" && $pos1 !== false) {
-
-                $pos2 = strpos($cart->detail,'|',$pos1 + 1);
-                if($pos2 === false) $pos2 = strlen($cart->details);
+                $pos2 = strpos($cart->details, '|', $pos1 + 1);
+                if ($pos2 === false) $pos2 = strlen($cart->details);
                 $quantityProduct = substr($cart->details,
                     $pos1 + strlen($id . ','),
                     $pos2 - $pos1 - strlen($id . ','));
@@ -141,6 +141,9 @@ class CartController extends Controller
                     ->first();
                 if ($cart == null)
                     return $this->NotFoundResponse();
+
+                if((int)$request->get('quantity') <= 0)
+                    return $this->MyItemsInCart($request);
 
                 $idProduct = $request->get('id');
                 $start = strpos($cart->Detail,$idProduct . ',');
@@ -205,6 +208,8 @@ class CartController extends Controller
                     ->first();
                 if ($cart == null)
                     return $this->NotFoundResponse();
+                if((int)$request->get('quantity') <= 0)
+                    return $this->MyItemInCart($request,$id);
 
                 $idProduct = $id;
                 $start = strpos($cart->Detail,$idProduct . ',');
@@ -216,15 +221,55 @@ class CartController extends Controller
                     $product = Product::where('ID',$idProduct)->first();
                     if($quantity > $product->Quantity) $quantity = $product->Quantity;
 
+
                     $cart->Detail = substr_replace($cart->Detail, $quantity . '', $start, $end - $start);
                     $cart->save();
-                    return $this->MyItemsInCart($request);
+                    return $this->MyItemInCart($request,$id);
                 }
             } catch (Exception $ex) {
                 return $this->ForbiddenResponse();
             }
         }
-        return $this->NotFoundResponse();
+        return $this->BadResponse();
+    }
+
+
+    public function checkout(Request $request){
+        if($request->has('receiverName')
+        && $request->has('receiverPhone')
+        && $request->has('receiverAddress')){
+            //try{
+                $user = $request->user();
+                $cart = Cart::select('carts.*')
+                    ->where('users.ID', $user->ID)
+                    ->join('customers', 'customers.ID', 'carts.ID_CUSTOMER')
+                    ->join('users', 'users.ID_CUSTOMER', 'customers.ID')
+                    ->first();
+
+                if ($cart == null)
+                    return $this->NotFoundResponse();
+                if($cart->Detail == "")
+                    return $this->ForbiddenResponse('Cart is empty!');
+
+                $bill = new Bill();
+                $bill->ID = Bill::max('ID') + 1 ;
+                $bill->ID_CUSTOMER = $cart->ID_CUSTOMER;
+                $bill->Receiver_name = $request->get('receiverName');
+                $bill->Receiver_phone = $request->get('receiverPhone');
+                $bill->Receiver_address = $request->get('receiverAddress');
+                $bill->Detail = $cart->Detail;
+                $bill->State = 1;
+                $bill->save();
+
+                $cart->Detail = '';
+                $cart->save();
+
+                return $this->OKResponse($bill->show($bill->ID));
+            //}catch (Exception $ex){
+            //    return $this->ForbiddenResponse();
+           // }
+        }
+        return $this->BadResponse();
     }
 
 

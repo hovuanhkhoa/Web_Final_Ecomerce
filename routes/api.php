@@ -25,6 +25,8 @@ Route::get('/categories', 'CategoryController@index');
 
 Route::get('/categories/{id}', 'CategoryController@show');
 
+Route::get('/categories/accessories/{id}', 'CategoryController@show');
+
 Route::post('/categories', 'CategoryController@store')
     ->middleware(['auth:api','scope:admin']);
 
@@ -125,6 +127,30 @@ Route::get('/search', 'ProductController@search');
 
 Route::get('/featured-products', 'ProductController@FeatureProducts');
 
+
+Route::get('/featured-accessories', 'ProductController@FeatureAccessories');
+
+Route::post('/me/cart/checkout', 'CartController@checkout')
+    ->middleware(['auth:api','scope:admin,user']);
+
+
+Route::get('/bills', 'BillController@index')
+    ->middleware(['auth:api','scope:admin']);
+
+Route::get('/me/bills', 'BillController@indexMe')
+    ->middleware(['auth:api','scope:admin,user']);
+
+Route::get('/me/bills/{id}', 'BillController@showMe')
+    ->middleware(['auth:api','scope:admin,user']);
+
+Route::get('/bills/{id}', 'BillController@show')
+    ->middleware(['auth:api','scope:admin']);
+
+Route::put('/bills/{id}', 'BillController@update')
+    ->middleware(['auth:api','scope:admin']);
+
+Route::delete('/bills/{id}', 'BillController@remove')
+    ->middleware(['auth:api','scope:admin']);
 
 
 
