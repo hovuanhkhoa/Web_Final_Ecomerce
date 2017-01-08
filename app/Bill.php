@@ -18,7 +18,8 @@ class Bill extends Model
             'Customer_name as customerName',
             'Address as customerAddress',
             'Phone as customerPhone',
-            'Identify_number as customerIdentifyNumber')
+            'Identify_number as customerIdentifyNumber',
+            'State as state')
             ->where('bills.ID',$id)
             ->join('customers','customers.ID','bills.ID_CUSTOMER')->first();
         $total = 0;

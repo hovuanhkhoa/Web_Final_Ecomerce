@@ -168,6 +168,8 @@ Route::post('/login', 'Auth@Login');
 
 Route::get('/facebook/login', 'Auth@LoginFacebook');
 
+Route::post('/facebook/login', 'Auth@LoginFacebook');
+
 Route::post('/refresh_token','Auth@RefreshToken');
 
 Route::post('/register','Auth@Register');

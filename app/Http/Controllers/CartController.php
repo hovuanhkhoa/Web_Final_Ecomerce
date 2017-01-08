@@ -20,18 +20,17 @@ class CartController extends Controller
                 ->where('users.ID', $user->ID)
                 ->join('customers', 'customers.ID', 'users.ID_CUSTOMER')
                 ->join('carts', 'carts.ID_CUSTOMER', 'customers.ID')->first();
-            if($cart == null)
+            if ($cart == null)
                 return $this->NotFoundResponse();
 
             $detailArray = [];
-            if ($cart->details != "") {
+            if ($cart->details !== null && strlen($cart->details) > 1) {
                 $detail = $cart->details;
                 $productArray = explode('|', $detail);
                 foreach ($productArray as $product) {
-                    $pos1 = strpos($product,',');
-                    $idProduct = substr($product,0, $pos1);
-                    $quantityProduct = substr($product,$pos1 + 1 ,strlen($product)-1 - $pos1);
-
+                    $pos1 = strpos($product, ',');
+                    $idProduct = substr($product, 0, $pos1);
+                    $quantityProduct = substr($product, $pos1 + 1, strlen($product) - 1 - $pos1);
                     $temp = Product::select('products.ID as id',
                         'Category_name as categoryName',
                         'Maker_name as makerName',
@@ -238,7 +237,7 @@ class CartController extends Controller
         if($request->has('receiverName')
         && $request->has('receiverPhone')
         && $request->has('receiverAddress')){
-            //try{
+            try {
                 $user = $request->user();
                 $cart = Cart::select('carts.*')
                     ->where('users.ID', $user->ID)
@@ -248,11 +247,26 @@ class CartController extends Controller
 
                 if ($cart == null)
                     return $this->NotFoundResponse();
-                if($cart->Detail == "")
+                if ($cart->Detail == "")
                     return $this->ForbiddenResponse('Cart is empty!');
 
+
+                $arrayItems = explode('|',$cart->Detail);
+
+                foreach ($arrayItems as $item) {
+                    $temp = explode(',',$item);
+                    $idProduct = $temp[0];
+                    $quantity = $temp[1];
+
+                    $product = Product::where('ID',$idProduct)->first();
+                    $product->Quantity = $product->Quantity - $quantity;
+                    if($product->Quantity < 0) $product->Quantity = 0;
+                    $product->save();
+                }
+
+
                 $bill = new Bill();
-                $bill->ID = Bill::max('ID') + 1 ;
+                $bill->ID = Bill::max('ID') + 1;
                 $bill->ID_CUSTOMER = $cart->ID_CUSTOMER;
                 $bill->Receiver_name = $request->get('receiverName');
                 $bill->Receiver_phone = $request->get('receiverPhone');
@@ -265,9 +279,9 @@ class CartController extends Controller
                 $cart->save();
 
                 return $this->OKResponse($bill->show($bill->ID));
-            //}catch (Exception $ex){
-            //    return $this->ForbiddenResponse();
-           // }
+            }catch (Exception $ex){
+                return $this->ForbiddenResponse();
+            }
         }
         return $this->BadResponse();
     }

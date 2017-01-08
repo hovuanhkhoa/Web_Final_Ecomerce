@@ -56,9 +56,11 @@ class Auth extends Controller
         if($request->has('code')) {
             $clientID = '1363475290332214';
             $redirect_uri = 'http://localhost:8887/app/index.html';
+            //$redirect_uri = '';
             $client_secret = 'cb551b6f00ee87959d1ecbad0b36556f';
             $app_client_secret = 'uexrsBOzfb6y7PHm4C2tIQrROBzAnF74jx1485TN';
             $code = $request->get('code');
+            //dd($code);
 
             $facebook_access_token_uri = "https://graph.facebook.com/v2.8/oauth/access_token?client_id=$clientID&redirect_uri=$redirect_uri&client_secret=$client_secret&code=$code";
 
@@ -71,6 +73,10 @@ class Auth extends Controller
             curl_close($ch);
             // Get access token
             $aResponse = json_decode($response);
+
+            //dd($response);
+
+
             $access_token = $aResponse->access_token;
             //return $access_token;
 
