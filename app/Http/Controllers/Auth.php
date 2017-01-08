@@ -55,7 +55,7 @@ class Auth extends Controller
     public function LoginFacebook(Request $request){
         if($request->has('code')) {
             $clientID = '1363475290332214';
-            $redirect_uri = 'http://localhost:8001/Web_Final_Ecomerce/public/api/facebook/login';
+            $redirect_uri = 'http://118.68.226.86:8001/Web_Final_Ecomerce/public/api/facebook/login';
             $client_secret = 'cb551b6f00ee87959d1ecbad0b36556f';
             $code = $request->get('code');
 
@@ -113,7 +113,7 @@ class Auth extends Controller
             $body = json_encode([
                 "grant_type" => "password",
                 "client_id" => 2,
-                "client_secret" => "4jIxZ3fjI0UNQrRFQ0esspZVtIMmFfXHIw9GI7SD",
+                "client_secret" => "uexrsBOzfb6y7PHm4C2tIQrROBzAnF74jx1485TN",
                 "username" => $fbid,
                 "password" => "@#@$$fbid@#@"]);
 

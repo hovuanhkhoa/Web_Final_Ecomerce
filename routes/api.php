@@ -100,7 +100,11 @@ Route::delete('/products/{id}', 'ProductController@remove')
 Route::get('/me', 'CustomerController@index')
     ->middleware(['auth:api','scope:admin,user']);
 
+Route::get('/me/profile', 'CustomerController@index')
+    ->middleware(['auth:api','scope:admin,user']);
 
+Route::put('/me/profile', 'CustomerController@UpdateProfile')
+    ->middleware(['auth:api','scope:admin,user']);
 
 
 
