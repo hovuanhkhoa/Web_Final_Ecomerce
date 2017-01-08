@@ -32,18 +32,45 @@ class Bill extends Model
                 $idProduct = substr($product,0, $pos1);
                 $quantityProduct = substr($product,$pos1 +1,strlen($product) -1 - $pos1);
 
-                $temp = Product::select('products.ID as id',
+                $kk = Product::select('products.ID as id',
                     'Category_name as categoryName',
                     'Maker_name as makerName',
                     'Product_name as productName',
                     'Detail as details',
                     'Price as price',
-                    'Quantity as quantity')->where('products.ID', $idProduct)
+                    'Quantity as quantity',
+                    'ID_TAG as tags',
+                    'Media_set as media')->where('products.ID', $idProduct)
                     ->join('categories', 'categories.ID', 'products.ID_CATEGORY')
                     ->join('makers', 'makers.ID', 'products.ID_MAKER')->first();
-                $temp->quantity = $quantityProduct;
-                $total += $quantityProduct * $temp->price;
-                array_push($detailArray, $temp);
+
+
+                $tagSet = [];
+                $mediaSet = [];
+
+                $tagArray = explode(',', $kk->tags);
+                foreach ($tagArray as $tag) {
+                    $temp = Tag::select('Tag_name as tagName')->where('ID', $tag)->first();
+                    array_push($tagSet, $temp);
+                }
+
+                $mediaArray = explode(',', $kk->media);
+                foreach ($mediaArray as $media) {
+                    $temp = Media::select('Media_name as mediaName', 'Link as link')
+                        ->where('Media_name', $kk->id . '_' . $media)->get();
+                    if ($temp != null) {
+                        foreach ($temp as $t) {
+                            array_push($mediaSet, $t);
+                        }
+                    }
+                }
+
+                $kk->tags = $tagSet;
+                $kk->media = $mediaSet;
+
+                $kk->quantity = $quantityProduct;
+                $total += (int)$quantityProduct * (int)$kk->price;
+                array_push($detailArray, $kk);
             }
         }
         $bill->details = $detailArray;

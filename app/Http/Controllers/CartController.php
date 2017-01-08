@@ -70,7 +70,7 @@ class CartController extends Controller
 
 
 
-                    $kk->quantity = $quantityProduct;
+                    $kk->quantity = (int)$quantityProduct;
                     array_push($detailArray, $kk);
                 }
             }
@@ -136,7 +136,7 @@ class CartController extends Controller
                     $kk->media = $mediaSet;
 
 
-                    $kk->quantity = $quantityProduct;
+                    $kk->quantity = (int)$quantityProduct;
                     array_push($detailArray, $kk);
                 }
             }
@@ -154,9 +154,13 @@ class CartController extends Controller
                 ->where('users.ID', $user->ID)
                 ->join('customers', 'customers.ID', 'users.ID_CUSTOMER')
                 ->join('carts', 'carts.ID_CUSTOMER', 'customers.ID')->first();
+
+
             if ($cart == null)
                 return $this->NotFoundResponse();
 
+
+            //dd($cart->details);
             $temp = '';
             $pos1 = strpos($cart->details, $id . ',');
             if ($cart->details != "" && $pos1 !== false) {
@@ -172,10 +176,14 @@ class CartController extends Controller
                     'Product_name as productName',
                     'Detail as details',
                     'Price as price',
-                    'Quantity as quantity')->where('products.ID', $id)
+                    'Quantity as quantity',
+                    'ID_TAG as tags',
+                    'Media_set as media')
+                    ->where('products.ID', $id)
                     ->join('categories', 'categories.ID', 'products.ID_CATEGORY')
                     ->join('makers', 'makers.ID', 'products.ID_MAKER')->first();
 
+                //dd($kk);
 
 
                 $tagSet = [];
@@ -202,7 +210,7 @@ class CartController extends Controller
                 $kk->media = $mediaSet;
 
 
-                $kk->quantity = $quantityProduct;
+                $kk->quantity = (int)$quantityProduct;
                 return $this->OKResponse($kk);
             }
         }catch (Exception $ex){
@@ -248,7 +256,7 @@ class CartController extends Controller
                     }
                 }
                 $cart->save();
-                return $this->MyItemsInCart($request);
+                return $this->MyItemInCart($request,$idProduct);
             } catch (Exception $ex) {
                 return $this->ForbiddenResponse();
             }
@@ -257,14 +265,15 @@ class CartController extends Controller
     }
 
     public function RemoveItemFromCart(Request $request, $id){ ////// need repair
-        try {
+        //try {
             $user = $request->user();
             $cart = Cart::select('carts.*')
                 ->where('users.ID', $user->ID)
-                ->where('carts.ID', $request->get('id'))
                 ->join('customers', 'customers.ID', 'carts.ID_CUSTOMER')
                 ->join('users', 'users.ID_CUSTOMER', 'customers.ID')
                 ->first();
+
+            //dd($cart->Detail);
 
             if ($cart == null)
                 return $this->NotFoundResponse();
@@ -276,12 +285,14 @@ class CartController extends Controller
             $end = $flag !== false ? $flag + 1 : strlen($cart->Detail);
 
             $cart->Detail = substr_replace($cart->Detail, '', $start, $end - $start);
+
+
             $cart->save();
 
             return $this->MyItemsInCart($request);
-        } catch (Exception $ex) {
-            return $this->ForbiddenResponse();
-        }
+        //} catch (Exception $ex) {
+        //    return $this->ForbiddenResponse();
+        //}
     }
 
     public function UpdateItemInCart(Request $request, $id){ // new check quantity = 0;
@@ -304,13 +315,17 @@ class CartController extends Controller
                     $start +=  + strlen($idProduct . ',');
                     $flag = strpos($cart->Detail, '|', $start);
                     $end = $flag !== false ? $flag : strlen($cart->Detail);
-                    $quantity = (int)substr($cart->Detail, $start, $end - $start) + (int)$request->get('quantity');
+                    //$quantity = (int)substr($cart->Detail, $start, $end - $start) + (int)$request->get('quantity');
+                    $quantity = (int)$request->get('quantity');
                     $product = Product::where('ID',$idProduct)->first();
                     if($quantity > $product->Quantity) $quantity = $product->Quantity;
 
 
                     $cart->Detail = substr_replace($cart->Detail, $quantity . '', $start, $end - $start);
+                    //dd($cart->Detail);
+
                     $cart->save();
+
                     return $this->MyItemInCart($request,$id);
                 }
             } catch (Exception $ex) {

@@ -33,7 +33,7 @@ class BillController extends Controller
         }catch (Exception $ex){
             return $this->NotFoundResponse();
         }
-        return $this->OKResponse($bill->show());
+        return $this->OKResponse($bill->show($bill->id));
     }
 
     public  function update(Request $request, $id){
@@ -55,7 +55,7 @@ class BillController extends Controller
             } catch (Exception $ex) {
                 return $this->NotFoundResponse();
             }
-            return $this->OKResponse($bill->show());
+            return $this->OKResponse($bill->show($bill->id));
         }
         return $this->BadResponse();
     }
@@ -108,7 +108,7 @@ class BillController extends Controller
         }catch (Exception $ex){
             return $this->NotFoundResponse();
         }
-        return $this->OKResponse($bill->show());
+        return $this->OKResponse($bill->show($bill->id));
     }
 
 
