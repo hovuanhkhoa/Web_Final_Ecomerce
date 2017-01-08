@@ -28,18 +28,8 @@
       <file leaf-file-name="api.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/api.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.5" vertical-offset="0" max-vertical-offset="3026">
-              <caret line="28" column="38" selection-start-line="28" selection-start-column="38" selection-end-line="28" selection-end-column="38" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="database.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config/database.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5185185" vertical-offset="28" max-vertical-offset="2159">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state vertical-scroll-proportion="-5.4814816" vertical-offset="2067" max-vertical-offset="3026">
+              <caret line="140" column="43" selection-start-line="140" selection-start-column="43" selection-end-line="140" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -71,6 +61,18 @@
             <state vertical-scroll-proportion="0.5185185" vertical-offset="28" max-vertical-offset="1547">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CartController.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/CartController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-0.541769" vertical-offset="2906" max-vertical-offset="4811">
+              <caret line="145" column="58" selection-start-line="145" selection-start-column="58" selection-end-line="145" selection-end-column="58" />
+              <folding>
+                <element signature="e#40#53#0#PHP" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -115,11 +117,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Auth.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Auth.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.360799" vertical-offset="680" max-vertical-offset="3842">
-              <caret line="57" column="67" selection-start-line="57" selection-start-column="67" selection-end-line="57" selection-end-column="67" />
+            <state vertical-scroll-proportion="-1.9615384" vertical-offset="680" max-vertical-offset="3842">
+              <caret line="43" column="31" selection-start-line="43" selection-start-column="31" selection-end-line="43" selection-end-column="31" />
               <folding>
                 <element signature="e#40#53#0#PHP" expanded="true" />
               </folding>
@@ -186,8 +188,8 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/ProductController.php" />
         <option value="$PROJECT_DIR$/database/seeds/DatabaseSeeder.php" />
-        <option value="$PROJECT_DIR$/routes/api.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Auth.php" />
+        <option value="$PROJECT_DIR$/routes/api.php" />
       </list>
     </option>
   </component>
@@ -248,6 +250,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Web_Final_Ecomerce" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Web_Final" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Web_Final_Ecomerce" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="routes" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -613,16 +629,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/CartController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="705" max-vertical-offset="4811">
-          <caret line="145" column="58" selection-start-line="145" selection-start-column="58" selection-end-line="145" selection-end-column="58" />
-          <folding>
-            <element signature="e#40#53#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/MediaController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="451" max-vertical-offset="1377">
@@ -789,18 +795,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.9615384" vertical-offset="680" max-vertical-offset="3842">
+          <caret line="43" column="31" selection-start-line="43" selection-start-column="31" selection-end-line="43" selection-end-column="31" />
+          <folding>
+            <element signature="e#40#53#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/routes/api.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.5" vertical-offset="0" max-vertical-offset="3026">
-          <caret line="28" column="38" selection-start-line="28" selection-start-column="38" selection-end-line="28" selection-end-column="38" />
+        <state vertical-scroll-proportion="-5.4814816" vertical-offset="2067" max-vertical-offset="3026">
+          <caret line="140" column="43" selection-start-line="140" selection-start-column="43" selection-end-line="140" selection-end-column="43" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/CartController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.360799" vertical-offset="680" max-vertical-offset="3842">
-          <caret line="57" column="67" selection-start-line="57" selection-start-column="67" selection-end-line="57" selection-end-column="67" />
+        <state vertical-scroll-proportion="-0.541769" vertical-offset="2906" max-vertical-offset="4811">
+          <caret line="145" column="58" selection-start-line="145" selection-start-column="58" selection-end-line="145" selection-end-column="58" />
           <folding>
             <element signature="e#40#53#0#PHP" expanded="true" />
           </folding>

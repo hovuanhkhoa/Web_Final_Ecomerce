@@ -136,7 +136,7 @@ Route::get('/featured-products', 'ProductController@FeatureProducts');
 Route::get('/featured-accessories', 'ProductController@FeatureAccessories');
 
 
-Route::get('products/{id}/related-product', 'ProductController@RelatedProduct');
+Route::get('products/{id}/related-products', 'ProductController@RelatedProduct');
 
 Route::get('products/{id}/related-accessories', 'ProductController@RelatedAccessory');
 
