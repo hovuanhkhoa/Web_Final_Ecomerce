@@ -55,8 +55,9 @@ class Auth extends Controller
     public function LoginFacebook(Request $request){
         if($request->has('code')) {
             $clientID = '1363475290332214';
-            $redirect_uri = 'http://118.68.226.86:8001/Web_Final_Ecomerce/public/api/facebook/login';
+            $redirect_uri = 'http://localhost:8887/app/index.html';
             $client_secret = 'cb551b6f00ee87959d1ecbad0b36556f';
+            $app_client_secret = 'uexrsBOzfb6y7PHm4C2tIQrROBzAnF74jx1485TN';
             $code = $request->get('code');
 
             $facebook_access_token_uri = "https://graph.facebook.com/v2.8/oauth/access_token?client_id=$clientID&redirect_uri=$redirect_uri&client_secret=$client_secret&code=$code";
@@ -113,7 +114,7 @@ class Auth extends Controller
             $body = json_encode([
                 "grant_type" => "password",
                 "client_id" => 2,
-                "client_secret" => "uexrsBOzfb6y7PHm4C2tIQrROBzAnF74jx1485TN",
+                "client_secret" => $app_client_secret,
                 "username" => $fbid,
                 "password" => "@#@$$fbid@#@"]);
 
