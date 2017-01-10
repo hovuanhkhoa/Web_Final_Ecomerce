@@ -36,9 +36,10 @@ class CustomerController extends Controller
             && $request->has('address')) {
             try{
                 $user = $request->user();
-                $me = Customer::select('customers.*')->where('users.ID',$user->ID)
-                    ->join('customers','customers.ID','users.ID_CUSTOMER')
-                    ->first();
+                $me = Customer::select('customers.*')
+                    ->join('users','customers.ID','users.ID_CUSTOMER')
+                    ->groupBy('customers.ID')
+                    ->where('users.ID',$user->ID)->first();
 
                 if($me == null){
                     $this->NotFoundResponse();

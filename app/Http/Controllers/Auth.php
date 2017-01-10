@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
-
+use Symfony\Component\CssSelector\Tests\Parser\Handler\HashHandlerTest;
 
 
 class Auth extends Controller
@@ -220,6 +220,48 @@ class Auth extends Controller
             $role = $role->name;
         }
         return $role;
+    }
+
+    public function ChangePassword(Request $request){
+       // try{
+            if ($request->has('oldPassword')
+            && $request->has('newPassword')) {
+                $user = $request->user();
+                $app_client_secret = 'uexrsBOzfb6y7PHm4C2tIQrROBzAnF74jx1485TN';
+
+                $body = json_encode([
+                    "grant_type" => "password",
+                    "client_id" => 2,
+                    "client_secret" => $app_client_secret,
+                    "username" => $user->username,
+                    "password" => $user->password]);
+
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, App::make('url')->to('/') . '/api/login');
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+                $res = curl_exec($ch);
+                curl_close($ch);
+
+                $type = $res->token_type;
+
+                if($type == null){
+                    return $this->ForbiddenResponse('Old password is not correct');
+                }
+
+
+
+
+
+            }
+            return $this->OKResponse(['messaage'=>'Reseted password!']);
+        //}catch (Exception $ex){
+        //    return $this->ForbiddenResponse();
+        //}
+        return $this->BadResponse();
     }
 
 

@@ -291,7 +291,7 @@ class ProductController extends Controller
                 'Maker_name as makerName',
                 'Media_set as media',
                 'ID_TAG as tags')
-                ->where('products.created_at','>=',$end)
+                //->where('products.created_at','>=',$end)
                 ->join('categories', 'categories.ID', 'products.ID_CATEGORY')
                 ->join('makers', 'makers.ID', 'products.ID_MAKER')->get();
 
@@ -303,6 +303,7 @@ class ProductController extends Controller
                 $tagSet = [];
                 $mediaSet = [];
                 $flag = true;
+                $flag1 = true;
 
                 $tagArray = explode(',', $product->tags);
                 foreach ($tagArray as $tag) {
@@ -310,11 +311,13 @@ class ProductController extends Controller
                     //dd($temp->tagName);
                     if(strpos(strtolower($temp->tagName), strtolower('Sản phẩm chính')) !== false)
                         $flag = false;
+                    if(strpos(strtolower($temp->tagName), strtolower('Hot'))!== false)
+                        $flag1 = false;
                     array_push($tagSet, $temp);
                 }
 
 
-                if($flag) continue;
+                if($flag || $flag1) continue;
 
 
                 $mediaArray = explode(',', $product->media);
@@ -353,7 +356,7 @@ class ProductController extends Controller
                 'Maker_name as makerName',
                 'Media_set as media',
                 'ID_TAG as tags')
-                ->where('products.created_at','>=',$end)
+                //->where('products.created_at','>=',$end)
                 ->join('categories', 'categories.ID', 'products.ID_CATEGORY')
                 ->join('makers', 'makers.ID', 'products.ID_MAKER')->get();
 
@@ -365,16 +368,19 @@ class ProductController extends Controller
                 $tagSet = [];
                 $mediaSet = [];
                 $flag = true;
+                $flag1 = true;
 
                 $tagArray = explode(',', $product->tags);
                 foreach ($tagArray as $tag) {
                     $temp = Tag::select('Tag_name as tagName')->where('ID', $tag)->first();
                     if(strpos(strtolower($temp->tagName), strtolower('Phụ kiện')) !== false)
                         $flag = false;
+                    if(strpos(strtolower($temp->tagName), strtolower('Hot'))!== false)
+                        $flag1 = false;
                     array_push($tagSet, $temp);
                 }
 
-                if($flag) continue;
+                if($flag || $flag1) continue;
 
                 $mediaArray = explode(',', $product->media);
                 foreach ($mediaArray as $media) {

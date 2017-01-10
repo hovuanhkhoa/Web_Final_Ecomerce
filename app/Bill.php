@@ -19,7 +19,8 @@ class Bill extends Model
             'Address as customerAddress',
             'Phone as customerPhone',
             'Identify_number as customerIdentifyNumber',
-            'State as state')
+            'State as state',
+            'bills.created_at as orderDate')
             ->where('bills.ID',$id)
             ->join('customers','customers.ID','bills.ID_CUSTOMER')->first();
         $total = 0;
@@ -75,6 +76,8 @@ class Bill extends Model
         }
         $bill->details = $detailArray;
         $bill->total = $total;
+        $stateArray = ['','Chờ giao hàng','Đã giao hàng thành công','Hủy đơn hàng','Đơn hàng bị hoàn trả'];
+        $bill->stateDetail = $stateArray[$bill->state];
         return $bill;
     }
 }

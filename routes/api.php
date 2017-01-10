@@ -166,6 +166,10 @@ Route::delete('/bills/{id}', 'BillController@remove')
 
 Route::post('/login', 'Auth@Login');
 
+
+Route::post('/chagepassword', 'Auth@ChangePassword')
+    ->middleware(['auth:api','scope:admin,user']);
+
 Route::get('/facebook/login', 'Auth@LoginFacebook');
 
 Route::post('/facebook/login', 'Auth@LoginFacebook');

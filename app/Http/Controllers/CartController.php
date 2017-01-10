@@ -382,7 +382,7 @@ class CartController extends Controller
                 $cart->save();
 
                 return $this->OKResponse($bill->show($bill->ID));
-            }catch (Exception $ex){
+           }catch (Exception $ex){
                 return $this->ForbiddenResponse();
             }
         }
